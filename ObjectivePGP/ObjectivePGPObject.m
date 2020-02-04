@@ -477,15 +477,15 @@ NS_ASSUME_NONNULL_BEGIN
 + (BOOL)verify:(NSData *)signedData withSignature:(nullable NSData *)detachedSignature usingKeys:(NSArray<PGPKey *> *)keys passphraseForKey:(nullable NSString * _Nullable(^NS_NOESCAPE)(PGPKey *key))passphraseForKeyBlock error:(NSError * __autoreleasing _Nullable *)error {
     PGPAssertClass(signedData, NSData);
 
-    let binaryMessages = [PGPArmor convertArmoredMessage2BinaryBlocksWhenNecessary:signedData error:error];
+//    let binaryMessages = [PGPArmor convertArmoredMessage2BinaryBlocksWhenNecessary:signedData error:error];
     // TODO: Process all messages
-    let binarySignedData = binaryMessages.count > 0 ? binaryMessages.firstObject : nil;
-    if (!binarySignedData) {
-        if (error) {
-            *error = [NSError errorWithDomain:PGPErrorDomain code:PGPErrorInvalidMessage userInfo:@{ NSLocalizedDescriptionKey: @"Invalid input data" }];
-        }
-        return NO;
-    }
+//    let binarySignedData = binaryMessages.count > 0 ? binaryMessages.firstObject : nil;
+//    if (!binarySignedData) {
+//        if (error) {
+//            *error = [NSError errorWithDomain:PGPErrorDomain code:PGPErrorInvalidMessage userInfo:@{ NSLocalizedDescriptionKey: @"Invalid input data" }];
+//        }
+//        return NO;
+//    }
 
     // Use detached signature if provided.
     // In that case treat input data as blob to be verified with the signature. Don't parse it.
@@ -503,7 +503,7 @@ NS_ASSUME_NONNULL_BEGIN
                     }
                     return NO;
                 }
-                return [signaturePacket verifyData:binarySignedData publicKey:issuerKey error:error];
+                return [signaturePacket verifyData:signedData publicKey:issuerKey error:error];
             }
         }
         return NO;
@@ -522,8 +522,8 @@ NS_ASSUME_NONNULL_BEGIN
 
     @autoreleasepool {
         // TODO: don't parse data here, get raw data and pass to verify:withsignature:
-        while (offset < binarySignedData.length) {
-            let packet = [PGPPacketFactory packetWithData:binarySignedData offset:offset consumedBytes:&consumedBytes];
+        while (offset < signedData.length) {
+            let packet = [PGPPacketFactory packetWithData:signedData offset:offset consumedBytes:&consumedBytes];
             [accumulatedPackets pgp_addObject:packet];
             offset += consumedBytes;
         }
