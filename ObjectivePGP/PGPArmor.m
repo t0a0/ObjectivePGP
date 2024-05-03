@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 + (NSString *)armored:(NSData *)data as:(PGPArmorType)type part:(NSUInteger)part of:(NSUInteger)ofParts {
-    NSMutableDictionary *headers = [@{ @"Version": @"ObjectivePGP", @"Comment": @"https://objectivepgp.com", @"Charset": @"UTF-8" } mutableCopy];
+    NSMutableDictionary *headers = [@{ @"Version": @"Instant PGP (iOS v 1.1)", @"Charset": @"UTF-8" } mutableCopy];
 
     let headerString = [NSMutableString string];
     let footerString = [NSMutableString string];
